@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springboot_blog.myblog.dao.FriendLinkDao">
+
+    <!--查询所有友链-->
+    <select id="listFriendLink" resultType="com.example.springboot_blog.myblog.entity.FriendLink">
+        select * from friend_link order by create_time desc
+    </select>
+
+    <!--添加友链-->
+    <insert id="saveFriendLink" parameterType="com.example.springboot_blog.myblog.entity.FriendLink">
+        insert into friend_link (blog_name,blog_address,picture_url,create_time)
+        values (#{blogName},#{blogAddress},#{pictureUrl},#{createTime})
+    </insert>
+
+    <!--根据网址查询友链-->
+    <select id="getFriendLinkByBlogaddress" resultType="com.example.springboot_blog.myblog.entity.FriendLink">
+        select * from friend_link f where f.blog_address = #{blogAddress}
+    </select>
+
+    <!--根据id查询友链-->
+    <select id="getFriendLink" resultType="com.example.springboot_blog.myblog.entity.FriendLink">
+        select * from friend_link f where f.id = #{id}
+    </select>
+
+    <!--编辑修改友链-->
+    <update id="updateFriendLink" parameterType="com.example.springboot_blog.myblog.entity.FriendLink">
+        update friend_link set blog_name = #{blogName}, blog_address = #{blogAddress}, picture_url = #{pictureUrl} where id = #{id};
+    </update>
+
+    <!--删除友链-->
+    <delete id="deleteFriendLink" >
+        delete from friend_link where id = #{id}
+    </delete>
+
+</mapper>

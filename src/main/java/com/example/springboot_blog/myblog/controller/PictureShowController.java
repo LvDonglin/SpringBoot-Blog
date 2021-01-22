@@ -1,0 +1,30 @@
+package com.example.springboot_blog.myblog.controller;
+
+import com.example.springboot_blog.myblog.service.PictureService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+/**
+ * @ProjectName: springboot_blog
+ * @Package: com.example.springboot_blog.myblog.controller
+ * @ClassName: PictureShowController
+ * @Author: 吕东霖
+ * @Description: ${description}
+ * @Date: 2020/12/4 19:22
+ * @Version: 1.0
+ */
+@Controller
+public class PictureShowController {
+
+    @Autowired
+    private PictureService pictureService;
+
+    @GetMapping("/picture")
+    public String friends(Model model) {
+        model.addAttribute("pictures",pictureService.listPicture());
+        return "picture";
+    }
+
+}

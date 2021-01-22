@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springboot_blog.myblog.dao.TypeDao">
+
+    <!--新增保存分类-->
+    <insert id="saveType" parameterType="com.example.springboot_blog.myblog.entity.Type">
+        insert into t_type values (#{id},#{name});
+    </insert>
+
+    <!--根据id查询分类-->
+    <select id="getType" resultType="com.example.springboot_blog.myblog.entity.Type">
+        select id,name from t_type where id = #{id}
+    </select>
+
+    <!--查询所有分类-->
+    <select id="getAllType" resultType="com.example.springboot_blog.myblog.entity.Type">
+        select * from t_type
+    </select>
+
+    <!--根据分类名称来查询-->
+    <select id="getTypeByName" resultType="com.example.springboot_blog.myblog.entity.Type">
+        select * from t_type where name = #{name}
+    </select>
+
+    <!--编辑修改分类-->
+    <update id="updateType" parameterType="com.example.springboot_blog.myblog.entity.Type">
+        update t_type set name = #{name} where id = #{id}
+    </update>
+
+    <!--删除分类-->
+    <delete id="deleteType" >
+        delete from t_type where id = #{id}
+    </delete>
+
+    <resultMap id="type" type="com.example.springboot_blog.myblog.entity.Type">
+        <id property="id" column="tid"/>
+        <result property="name" column="name"/>
+        <collection property="blogs" ofType="com.example.springboot_blog.myblog.entity.Blog">
+            <id property="id" column="bid"/>
+            <result property="title" column="title"/>
+            <result property="typeId" column="type_id"/>
+        </collection>
+    </resultMap>
+    <!--查询分类-->
+    <select id="getAllTypeAndBlog" resultMap="type">
+    select t.id tid, t.name, b.id bid, b.title,b.type_id
+    from t_type t,blog b
+    where t.id = b.type_id
+</select>
+
+</mapper>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springboot_blog.myblog.dao.BlogDao">
+    <!--新增保存文章-->
+    <insert id="saveBlog" parameterType="com.example.springboot_blog.myblog.entity.Blog">
+    insert into blog (id,title,author,user_id, content, cover_url, create_time,
+    views, commentable, update_time, type_id, description,published,flag,recommend)
+    values (#{id},#{title},#{author},#{userId},#{content},#{coverUrl},#{createTime},#{views},#{commentable},
+    #{updateTime},#{typeId},#{description},#{published},#{flag},#{recommend});
+    </insert>
+
+    <!--查询文章管理列表多对一配置-->
+    <resultMap id="blog" type="com.example.springboot_blog.myblog.entity.queryVo.BlogQuery">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="published" column="published"/>
+        <result property="typeId" column="type_id"/>
+        <association property="type" javaType="com.example.springboot_blog.myblog.entity.Type">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+    <!--查询文章管理列表-->
+    <select id="getAllBlogQuery" resultMap="blog">
+    select b.id,b.title,b.update_time,b.published,b.type_id,t.id,t.name
+    from blog b left outer join
+    t_type t on b.type_id = t.id order by b.update_time desc
+    </select>
+
+    <!--删除博客文章-->
+    <delete id="deleteBlog">
+    delete from blog where id = #{id}
+    </delete>
+
+    <!--查询编辑修改的文章-->
+    <select id="getBlogById" resultType="com.example.springboot_blog.myblog.entity.queryVo.ShowBlog">
+    select b.id,b.flag,b.title,b.content,b.type_id,
+    b.cover_url,b.description,b.published,b.commentable,b.recommend from blog b  where  b.id = #{id};
+    </select>
+
+    <!--编辑修改文章-->
+    <update id="updateBlog" parameterType="com.example.springboot_blog.myblog.entity.queryVo.ShowBlog">
+    update blog set published = #{published},flag = #{flag} ,
+    title = #{title}, content = #{content}, type_id = #{typeId},
+    cover_url = #{coverUrl} , description = #{description} ,
+    commentable = #{commentable} ,update_time = #{updateTime} ,recommend = #{recommend} where id = #{id};
+    </update>
+
+    <!--搜索博客管理列表-->
+    <select id="searchByTitleAndType" parameterType="com.example.springboot_blog.myblog.entity.queryVo.SearchBlog" resultMap="blog">
+        <bind name="pattern" value="'%' + title + '%'" />
+        select b.id,b.title,b.type_id,b.update_time,t.id,t.name from blog b ,t_type t
+        <where>
+            <if test="1 == 1">
+                b.type_id = t.id
+            </if>
+            <if test="typeId != null">
+                and b.type_id = #{typeId}
+            </if>
+            <if test="title != null">
+                and b.title like #{pattern}
+            </if>
+        </where>
+    </select>
+
+
+    <!--============首页相关查询============-->
+
+    <!--查询首页最新博客列表信息-->
+    <resultMap id="firstPageBlog" type="com.example.springboot_blog.myblog.entity.queryVo.FirstPageBlog">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="coverUrl" column="cover_url"/>
+        <result property="views" column="views"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="commentCount" column="comment_count"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="description" column="description"/>
+        <result property="typeName" column="name"/>
+        <result property="nickname" column="nickname"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+    <select id="getFirstPageBlog" resultMap="firstPageBlog">
+    select b.id,b.title,b.cover_url, b.views, b.comment_count,b.create_time,b.update_time,b.description,b.like_count,
+    t.name ,
+    u.nickname, u.avatar
+    from blog b, t_type t,user u
+    where b.type_id = t.id and  u.id = b.user_id order by b.create_time desc
+    </select>
+
+    <!--查询推荐文章-->
+    <select id="getAllRecommendBlog" resultType="com.example.springboot_blog.myblog.entity.queryVo.RecommendBlog">
+    select b.id, b.title, b.cover_url,b.recommend from blog b where b.recommend = true order by b.create_time desc limit 4;
+    </select>
+
+    <!--搜索文章-->
+    <select id="getSearchBlog" resultMap="firstPageBlog">
+        <bind name="pattern" value="'%' + query + '%'" />
+        select b.id,b.title,b.cover_url, b.views,b.comment_count,b.update_time,b.description,
+        t.name ,
+        u.nickname, u.avatar
+        from blog b, t_type t,user u
+        where b.type_id = t.id and  u.id = b.user_id and (b.title like #{pattern} or b.content like  #{pattern})
+        order by b.update_time desc
+    </select>
+
+    <!--统计博客信息-->
+    <select id="getBlogTotal" resultType="Integer">
+    select count(*) from blog
+    </select>
+    <select id="getBlogViewTotal" resultType="Integer">
+    select coalesce (sum(views),0) from blog
+   </select>
+    <select id="getBlogCommentTotal" resultType="Integer">
+    select count(*) from comment
+   </select>
+    <select id="getBlogMessageTotal" resultType="Integer">
+    select count(*) from message
+    </select>
+
+
+    <resultMap id="detailedBlog" type="com.example.springboot_blog.myblog.entity.queryVo.DetailedBlog">
+        <id property="id" column="bid"/>
+        <result property="coverUrl" column="cover_url"/>
+        <result property="flag" column="flag"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="likeCount" column="like_count"/>
+        <result property="typeName" column="name"/>
+        <result property="views" column="views"/>
+        <result property="commentCount" column="comment_count"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="commentable" column="commentable"/>
+        <result property="nickname" column="nickname"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+
+    <!--博客详情查询-->
+    <select id="getDetailedBlog" resultMap="detailedBlog">
+    select   b.id bid ,b.cover_url,b.flag,b.title,b.content,b.views,b.comment_count,b.update_time,b.commentable,b.like_count, u.nickname,u.avatar,t.name
+    from blog b,user u, t_type t
+    where b.user_id = u.id and b.type_id = t.id and b.id = #{id}
+    </select>
+
+    <!--文章访问自增-->
+    <update id="updateViews" parameterType="com.example.springboot_blog.myblog.entity.Blog">
+    update blog b set b.views = b.views+1 where b.id = #{id}
+    </update>
+
+    <!--查询出文章评论数量并更新-->
+    <update id="getCommentCountById" parameterType="com.example.springboot_blog.myblog.entity.Blog">
+    update blog b set b.comment_count = (
+    select count(*) from comment c where c.blog_id = #{id} and b.id = #{id}
+    ) WHERE b.id = #{id}
+    </update>
+
+
+    <!--根据TypeId查询博客列表，显示在分类页面-->
+    <select id="getByTypeId" resultMap="firstPageBlog">
+    select b.id,b.title,b.cover_url, b.views, b.comment_count, b.update_time, b.description,t.name ,u.nickname, u.avatar
+    from blog b, t_type t,user u
+    where b.type_id = t.id and u.id = b.user_id and b.type_id = #{typeId} order by b.update_time desc
+    </select>
+
+    <update id="updateLikeCount" parameterType="com.example.springboot_blog.myblog.entity.Blog">
+        update blog b set b.like_count = b.like_count+1 where b.id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springboot_blog.myblog.dao.PictureDao">
+
+    <!--查询所有照片-->
+    <select id="listPicture" resultType="com.example.springboot_blog.myblog.entity.Picture">
+        select * from picture order by picture.id desc
+    </select>
+
+    <!--添加图片-->
+    <insert id="savePicture" parameterType="com.example.springboot_blog.myblog.entity.Picture">
+        insert into picture (picture_name,picture_time,picture_url,picture_description)
+        values (#{pictureName},#{pictureTime},#{pictureUrl},#{pictureDescription})
+    </insert>
+
+    <!--根据id查询照片-->
+    <select id="getPicture" resultType="com.example.springboot_blog.myblog.entity.Picture">
+        select * from picture p where p.id = #{id}
+    </select>
+
+    <!--编辑修改相册-->
+    <update id="updatePicture" parameterType="com.example.springboot_blog.myblog.entity.Picture">
+        update picture
+        set picture_name = #{pictureName}, picture_time = #{pictureTime}, picture_url = #{pictureUrl}, picture_description = #{pictureDescription}
+        where id = #{id};
+    </update>
+
+    <!--删除照片-->
+    <delete id="deletePicture" >
+        delete from picture where id = #{id}
+    </delete>
+
+</mapper>

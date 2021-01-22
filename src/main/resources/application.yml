@@ -1,0 +1,29 @@
+
+spring:
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
+  profiles:
+    active: pro
+  mvc:
+    static-path-pattern: /**
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      additional-paths: static/**
+
+  resources:
+    static-locations: classpath:templates/,classpath:static/
+
+
+mybatis:
+  type-aliases-package: com.example.springboot_blog.myblog.entity
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+comment.avatar: /images/avatar.png
+message.avatar: /images/avatar.png
+server:
+  port: 80
