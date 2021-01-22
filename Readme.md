@@ -32,31 +32,31 @@
 
 后台管理页面：
 
-![image-20210122140400217](C:\Users\吕东霖\AppData\Roaming\Typora\typora-user-images\image-20210122140400217.png)
+![image-20210122140400217](https://gitee.com/dongldl/my-cdn/raw/master/image/image-20210122140400217.png)
 
 
 
 文章管理：
 
-![image-20210122140429248](C:\Users\吕东霖\AppData\Roaming\Typora\typora-user-images\image-20210122140429248.png)
+![image-20210122140429248](https://gitee.com/dongldl/my-cdn/raw/master/image/image-20210122140429248.png)
 
 
 
 文章分类管理：
 
-![image-20210122140511229](C:\Users\吕东霖\AppData\Roaming\Typora\typora-user-images\image-20210122140511229.png)
+![image-20210122140511229](https://gitee.com/dongldl/my-cdn/raw/master/image/image-20210122140511229.png)
 
 
 
 博客编辑界面：
 
-![image-20210122140548962](C:\Users\吕东霖\AppData\Roaming\Typora\typora-user-images\image-20210122140548962.png)
+![image-20210122140548962](https://gitee.com/dongldl/my-cdn/raw/master/image/image-20210122140548962.png)
 
 
 
 友链管理
 
-![image-20210122140620008](C:\Users\吕东霖\AppData\Roaming\Typora\typora-user-images\image-20210122140620008.png)
+![image-20210122140620008](https://gitee.com/dongldl/my-cdn/raw/master/image/image-20210122140620008.png)
 
 
 
